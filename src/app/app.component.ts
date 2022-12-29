@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -27,6 +27,25 @@ import { Component } from '@angular/core';
   `,
   styles: []
 })
-export class AppComponent {
+
+export class AppComponent implements OnInit {
   title = 'RXJS-EP';
+
+  ngOnInit(): void {
+    this.minhaPromise('Eduardso')
+    .then(result => console.log(result))
+    .catch(error => console.error(error));
+  }
+
+  minhaPromise(nome: string): Promise < string > {
+    return new Promise((resolve, reject) => {
+      if (nome === 'Eduardo') {
+        setTimeout(() => {
+          resolve('seja bem vindo');
+        }, 1000);
+      } else {
+        reject('voce nao eh bem vindo');
+      }
+    })
+  }
 }
