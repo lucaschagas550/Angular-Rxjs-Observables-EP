@@ -37,17 +37,30 @@ export class AppComponent implements OnInit {
     // .then(result => console.log(result))
     // .catch(error => console.error(error));
 
+    //Observable
     // this.minhaObservable('').subscribe(
     //   result => console.log(result),
     //   error => console.error(error)
     // );
 
-    this.minhaObservable('').subscribe(
-      {
-        next: (result) => { console.log(result); },
-        error: (error) => { console.log(error); },
-      },
-    );
+    //Observer
+    // this.minhaObservable('').subscribe(
+    //   {
+    //     next: (result) => { console.log(result); },
+    //     error: (error) => { console.log(error); },
+    //   },
+    // );
+
+    //Observer
+    const observer = {
+      next: (valor: any) => console.log('Next ' + valor),
+      error: (erro: any) => console.log('Erro ' + erro),
+      complete: () => console.log('complete'),
+    }
+
+    //Observer
+    const obs = this.minhaObservable('Eduardo');
+    obs.subscribe(observer);
   }
 
   minhaPromise(nome: string): Promise<string> {
@@ -70,6 +83,7 @@ export class AppComponent implements OnInit {
         setTimeout(() => {
           subscriber.next('resposta com delay');
         }, 1000);
+        subscriber.complete();
       } else {
         subscriber.error('deu errado');
       }
