@@ -1,3 +1,4 @@
+import { JsonPipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -53,14 +54,23 @@ export class AppComponent implements OnInit {
 
     //Observer
     const observer = {
-      next: (valor: any) => console.log('Next ' + valor),
-      error: (erro: any) => console.log('Erro ' + erro),
+      next: (valor: any) => console.log('Next: ', valor),
+      error: (erro: any) => console.log('Erro: ' + JSON.stringify(erro)),
       complete: () => console.log('complete'),
     }
 
     //Observer
-    const obs = this.minhaObservable('Eduardo');
-    obs.subscribe(observer);
+    // const obs = this.minhaObservable('Eduardo');
+    // obs.subscribe(observer);
+
+    //Observer
+    const obs = this.usuarioObservable('Admin', 'Admin@admin.com');
+    const subs = obs.subscribe(observer);
+
+    setTimeout(() => {
+      subs.unsubscribe();
+      console.log('conexao fechada:' + subs.closed);
+    }, 3500);
   }
 
   minhaPromise(nome: string): Promise<string> {
@@ -90,5 +100,43 @@ export class AppComponent implements OnInit {
     })
   }
 
+  usuarioObservable(nome: string, email: string): Observable<Usuario> {
+    return new Observable(subscriber => {
+      if (nome === 'Admin') {
+        let usuario = new Usuario(nome, email);
+        setTimeout(() => {
+          subscriber.next(usuario);
+        }, 1000);
 
+        setTimeout(() => {
+          subscriber.next(usuario);
+        }, 2000);
+
+        setTimeout(() => {
+          subscriber.next(usuario);
+        }, 3000);
+
+        setTimeout(() => {
+          subscriber.next(usuario);
+        }, 4000);
+
+        setTimeout(() => {
+          subscriber.complete();
+        }, 5000);
+      } else {
+        subscriber.error('deu errado');
+      }
+    })
+  }
+}
+
+export class Usuario {
+
+  constructor(nome: string, email: string) {
+    this.nome = nome;
+    this.email = email;
+  }
+
+  nome: string;
+  email: string;
 }
