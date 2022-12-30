@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -32,12 +33,24 @@ export class AppComponent implements OnInit {
   title = 'RXJS-EP';
 
   ngOnInit(): void {
-    this.minhaPromise('Eduardso')
-    .then(result => console.log(result))
-    .catch(error => console.error(error));
+    // this.minhaPromise('Eduardo')
+    // .then(result => console.log(result))
+    // .catch(error => console.error(error));
+
+    // this.minhaObservable('').subscribe(
+    //   result => console.log(result),
+    //   error => console.error(error)
+    // );
+
+    this.minhaObservable('').subscribe(
+      {
+        next: (result) => { console.log(result); },
+        error: (error) => { console.log(error); },
+      },
+    );
   }
 
-  minhaPromise(nome: string): Promise < string > {
+  minhaPromise(nome: string): Promise<string> {
     return new Promise((resolve, reject) => {
       if (nome === 'Eduardo') {
         setTimeout(() => {
@@ -48,4 +61,20 @@ export class AppComponent implements OnInit {
       }
     })
   }
+
+  minhaObservable(nome: string): Observable<string> {
+    return new Observable(subscriber => {
+      if (nome === 'Eduardo') {
+        subscriber.next('ola ' + nome);
+        subscriber.next('ola dnv ' + nome);
+        setTimeout(() => {
+          subscriber.next('resposta com delay');
+        }, 1000);
+      } else {
+        subscriber.error('deu errado');
+      }
+    })
+  }
+
+
 }
